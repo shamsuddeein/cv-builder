@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Google Fonts for professional typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <title>Professional CV Builder</title>
+    <style>
+        /* --- Root Variables for easy theme customization --- */
+        :root {
+            --paper-width: 21cm;
+            --paper-height: 29.7cm;
+            --primary-color: #2c3e50;
+            /* A deep, professional blue */
+            --secondary-color: #3498db;
+            /* A brighter, modern blue for accents */
+            --text-color: #34495e;
+            --muted-color: #7f8c8d;
+            --background-color: #f4f7f9;
+            --border-color: #dfe7ef;
+            --success-color: #2ecc71;
+        }
+
+        /* --- General Body and Layout Styles --- */
+        body {
+            font-family: 'Lato', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: var(--background-color);
+            color: var(--text-color);
+            font-size: 11pt;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s;
+        }
+
+        .app {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-start;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* --- Form Panel Styles --- */
+        .panel {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 25px 30px;
+            box-shadow: 0 10px 30px rgba(41, 51, 61, 0.07);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-panel {
+            flex: 1;
+            min-width: 450px;
+            height: calc(100vh - 40px);
+            overflow-y: auto;
+            position: sticky;
+            top: 20px;
+        }
+
+        .form-panel h3 {
+            margin-top: 0;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 900;
+            color: var(--primary-color);
+        }
+
+        .cv-controls {
+            display: flex;
+            justify-content: space-around;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        select,
+        input[type="color"] {
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 5px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        input[type="color"] {
+            width: 50px;
+            height: 30px;
+            padding: 2px;
+        }
+
+
+        fieldset {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+
+        fieldset:focus-within {
+            box-shadow: 0 0 0 2px var(--secondary-color);
+        }
+
+        legend {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--primary-color);
+            padding: 0 10px;
+        }
+
+        .form-panel label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .form-panel input,
+        .form-panel textarea,
+        .form-panel select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-panel input:focus,
+        .form-panel textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .grid-inputs div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grid-inputs input {
+            margin-bottom: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        #btn_print {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        #btn_print:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .clear-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .print-tip {
+            font-size: 0.8em;
+            color: var(--muted-color);
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        /* --- Preview Panel --- */
+        .preview-wrap {
+            flex: 2;
+            min-width: calc(var(--paper-width) + 60px);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px;
+            background: var(--background-color);
+            border: none;
+            box-shadow: none;
+        }
+
+        /* --- CV Paper and Content Styles --- */
+        .cv-paper {
+            width: var(--paper-width);
+            min-height: var(--paper-height);
+            padding: 1.5cm;
+            box-sizing: border-box;
+            background: #fff;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cv {
+            font-size: var(--base-font, 10.5pt);
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+
+        .cv-section {
+            margin-bottom: 10px;
+        }
+
+        /* --- TEMPLATE: MODERN --- */
+        .template-modern .name {
+            font-size: 2.5em;
+            font-weight: 900;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .template-modern .header-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px 15px;
+            text-align: center;
+            color: var(--muted-color);
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .template-modern .section-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            font-size: 1.2em;
+            border-bottom: 2px solid var(--primary-color);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .template-modern .personal-data-grid,
+        .template-modern .ref-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .template-modern .ref strong {
+            color: var(--primary-color);
+        }
+
+        /* --- TEMPLATE: CLASSIC --- */
+        .template-classic {
+            font-family: 'Merriweather', serif;
+        }
+
+        .template-classic .name {
+            font-size: 2.8em;
+            text-align: center;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .template-classic .header-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .template-classic .section-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+            border: 1px solid var(--primary-color);
+            background: #f8f8f8;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            padding: 4px;
+            text-transform: uppercase;
+        }
+
+        .template-classic .personal-data-grid,
+        .template-classic .ref-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .template-classic .ref strong {
+            color: var(--text-color);
+        }
+
+        /* --- Common CV Element Styles --- */
+        .personal-data-grid {
+            display: grid;
+            gap: 5px 20px;
+        }
+
+        .personal-data-grid>div {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .personal-data-grid>div>span:first-child {
+            font-weight: bold;
+        }
+
+        .list {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .list li {
+            margin-bottom: 5px;
+        }
+
+        .ref-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .ref {
+            line-height: 1.3;
+        }
+
+        .ref strong {
+            font-weight: bold;
+        }
+
+        .ref em {
+            font-style: italic;
+            color: var(--muted-color);
+        }
+
+        /* --- Responsive & Print Styles --- */
+        @media (max-width: 1200px) {
+            .form-panel {
+                position: static;
+                width: 100%;
+                min-width: unset;
+                height: auto;
+            }
+
+            .preview-wrap {
+                min-width: unset;
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Hide the form panel completely */
+            .form-panel {
+                display: none;
+            }
+
+            /* Reset layout for the main app container */
+            .app {
+                display: block;
+            }
+
+            /* Reset the preview wrapper so it's just a container */
+            .preview-wrap {
+                padding: 0;
+                border: none;
+                box-shadow: none;
+            }
+
+            /* Style the CV paper for printing */
+            .cv-paper {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                height: 100%;
+                padding: 1cm;
+                /* Adjust print margins here */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Input Form Panel -->
+        <div class="panel form-panel">
+            <h3>CV Builder Controls</h3>
+
+            <!-- CV Customization Controls -->
+            <div class="cv-controls">
+                <div class="control-group">
+                    <label for="template_selector">CV Template</label>
+                    <select id="template_selector">
+                        <option value="modern" selected>Modern</option>
+                        <option value="classic">Classic</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="accent_color_picker">Accent Color</label>
+                    <input type="color" id="accent_color_picker" value="#3498db">
+                </div>
+            </div>
+
+            <!-- Form Sections -->
+            <div class="form-sections">
+                <fieldset>
+                    <legend>Personal Details</legend>
+                    <label>Full Name</label>
+                    <input id="inp_name" value="HADIZA AHMED ISAH">
+                    <label>Phone Numbers (comma separated)</label>
+                    <input id="inp_phones" value="07063301018, 09136524838">
+                    <label>Email</label>
+                    <input id="inp_email" value="hadizaahmedisah@gmail.com">
+                    <label>Contact Address</label>
+                    <input id="inp_address" value="No. 10 Maigari Road, Sabon Gari H/Board Kaduna">
+                </fieldset>
+
+                <fieldset>
+                    <legend>Professional Objective</legend>
+                    <textarea id="inp_obj"
+                        rows="4">To develop a formidable career and to explore my potentials and enhance my professionalism to the growth of the organization in all positions and circumstances.</textarea>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Additional Personal Data</legend>
+                    <div class="grid-inputs">
+                        <div><label>Date of Birth</label><input id="inp_dob" value="5th November, 1995"></div>
+                        <div><label>Sex</label><input id="inp_sex" value="Female"></div>
+                        <div><label>Marital Status</label><input id="inp_marital" value="Married"></div>
+                        <div><label>State</label><input id="inp_state" value="Kaduna"></div>
+                        <div><label>LGA</label><input id="inp_lga" value="Igabi"></div>
+                        <div><label>Nationality</label><input id="inp_nat" value="Nigerian"></div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Education</legend>
+                    <label>Institutions (one per line)</label>
+                    <textarea id="inp_inst" rows="4">Federal University Dutsin-Ma, Katsina - 2019 – 2023
+Federal College of Education Zaria - 2013 – 2016
+Federal Government College Kaduna - 2008 – 2013
+LEA Primary School Zangon Aya - 2002 – 2008</textarea>
+                    <label>Qualifications (one per line)</label>
+                    <textarea id="inp_quals" rows="4">Bachelor of Science (B.Sc Microbiology) - 2023
+NCE (Biology/Chemistry) - 2016
+SSCE (WAEC/NECO) - 2013
+FSLC - 2008</textarea>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Experience & Skills</legend>
+                    <label>Work Experience (one per line)</label>
+                    <textarea id="inp_work" rows="3">Taught at Darul Qur'an Islamic Academy - 2018
+National Water Resources Institute Kaduna (SIWES) - 2021
+National Teachers Institutes (Service) - 2024</textarea>
+                    <label>Key Skills (one per line)</label>
+                    <textarea id="inp_skills">Monitoring and evaluation
+Policy writing
+Teamwork</textarea>
+                    <label>Hobbies (one per line)</label>
+                    <textarea id="inp_hobbies">Teaching
+Reading
+Traveling
+Sourcing for New Discoveries</textarea>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Referees</legend>
+                    <label>Each on a new line as: Name | Title | Phone | Email</label>
+                    <textarea id="inp_refs" rows="4">Dr. Mujtaba Shabu | Chief Lecturer, Federal University of Education Zaria | 08037000363 | mujtabashabu@gmail.com
+Al-Amin Murtala Daboh | Permanent Secretary, Governor's Office Kaduna | 08037008333 | </textarea>
+                </fieldset>
+            </div>
+
+            <div class="action-buttons">
+                <button id="btn_print">Download / Print PDF</button>
+                <button id="btn_clear" class="clear-btn">Clear Form</button>
+            </div>
+            <p class="print-tip">Tip: Use "Download / Print PDF" then "Save as PDF" in the print dialog.</p>
+        </div>
+
+        <!-- CV Preview Panel -->
+        <div class="preview-wrap panel">
+            <div class="cv-paper" id="cv_paper" aria-label="cv preview">
+                <div class="cv" id="cv">
+                    <header class="cv-header">
+                        <div class="name" id="cv_name">HADIZA AHMED ISAH</div>
+                        <div class="header-row">
+                            <span id="cv_phones"></span>
+                            <span id="cv_email"></span>
+                            <span id="cv_address"></span>
+                        </div>
+                    </header>
+
+                    <div class="section-title">OBJECTIVES</div>
+                    <div id="cv_obj" class="cv-section"></div>
+
+                    <div class="section-title">PERSONAL DATA</div>
+                    <div class="cv-section personal-data-grid">
+                        <div><span>Date of Birth:</span><span id="cv_dob"></span></div>
+                        <div><span>Sex:</span><span id="cv_sex"></span></div>
+                        <div><span>Marital Status:</span><span id="cv_marital"></span></div>
+                        <div><span>State of origin:</span><span id="cv_state"></span></div>
+                        <div><span>Local Govt. Area:</span><span id="cv_lga"></span></div>
+                        <div><span>Nationality:</span><span id="cv_nat"></span></div>
+                    </div>
+
+                    <div class="section-title">INSTITUTIONS ATTENDED</div>
+                    <ul id="cv_inst" class="list cv-section"></ul>
+
+                    <div class="section-title">EDUCATIONAL QUALIFICATIONS</div>
+                    <ul id="cv_quals" class="list cv-section"></ul>
+
+                    <div class="section-title">WORKING EXPERIENCE</div>
+                    <ul id="cv_work" class="list cv-section"></ul>
+
+                    <div class="section-title">KEY SKILLS</div>
+                    <ul id="cv_skills" class="list cv-section"></ul>
+
+                    <div class="section-title">HOBBIES AND INTERESTS</div>
+                    <ul id="cv_hobbies" class="list cv-section"></ul>
+
+                    <div class="section-title">REFEREES</div>
+                    <div id="cv_refs" class="ref-grid cv-section"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Creates an HTML list from a multi-line string.
+         * @param {string} text - The input text, with each item on a new line.
+         * @returns {string} - An HTML string of <li> elements.
+         */
+        function createList(text) {
+            return text.split('\n')
+                .map(s => s.trim()) // Remove whitespace
+                .filter(Boolean) // Remove empty lines
+                .map(item => `<li>${item}</li>`)
+                .join('');
+        }
+
+        /**
+         * Updates the entire CV preview with values from the form inputs.
+         */
+        function updatePreview() {
+            // Personal Info
+            document.getElementById('cv_name').innerText = document.getElementById('inp_name').value || 'Your Name';
+            document.getElementById('cv_phones').innerText = '📞 ' + (document.getElementById('inp_phones').value || 'Your Phone');
+            document.getElementById('cv_email').innerText = '✉️ ' + (document.getElementById('inp_email').value || 'Your Email');
+            document.getElementById('cv_address').innerText = '📍 ' + (document.getElementById('inp_address').value || 'Your Address');
+
+            // Objective
+            document.getElementById('cv_obj').innerText = document.getElementById('inp_obj').value || 'Your objective...';
+
+            // Personal Data Section
+            document.getElementById('cv_dob').innerText = document.getElementById('inp_dob').value || '';
+            document.getElementById('cv_sex').innerText = document.getElementById('inp_sex').value || '';
+            document.getElementById('cv_marital').innerText = document.getElementById('inp_marital').value || '';
+            document.getElementById('cv_state').innerText = document.getElementById('inp_state').value || '';
+            document.getElementById('cv_lga').innerText = document.getElementById('inp_lga').value || '';
+            document.getElementById('cv_nat').innerText = document.getElementById('inp_nat').value || '';
+
+            // All list-based sections
+            document.getElementById('cv_inst').innerHTML = createList(document.getElementById('inp_inst').value);
+            document.getElementById('cv_quals').innerHTML = createList(document.getElementById('inp_quals').value);
+            document.getElementById('cv_work').innerHTML = createList(document.getElementById('inp_work').value);
+            document.getElementById('cv_skills').innerHTML = createList(document.getElementById('inp_skills').value);
+            document.getElementById('cv_hobbies').innerHTML = createList(document.getElementById('inp_hobbies').value);
+
+            // Referees Section
+            const refsContainer = document.getElementById('cv_refs');
+            refsContainer.innerHTML = '';
+            const refs = document.getElementById('inp_refs').value.split('\n').map(s => s.trim()).filter(Boolean);
+            for (const ref of refs) {
+                const refParts = ref.split('|').map(s => s.trim());
+                const refHTML = `
+                    <div class="ref">
+                        <strong>${refParts[0] || ''}</strong><br>
+                        <em>${refParts[1] || ''}</em><br>
+                        ${refParts[2] || ''} ${refParts[3] ? `| ${refParts[3]}` : ''}
+                    </div>
+                    `;
+                refsContainer.innerHTML += refHTML;
+            }
+        }
+
+        /**
+         * Saves all form data and settings to the browser's local storage.
+         */
+        function saveData() {
+            const allInputs = document.querySelectorAll('.form-panel input, .form-panel textarea, .form-panel select');
+            const data = {};
+            allInputs.forEach(input => {
+                data[input.id] = input.value;
+            });
+            localStorage.setItem('cvBuilderData', JSON.stringify(data));
+        }
+
+        /**
+         * Loads data from local storage and populates the form fields and settings.
+         */
+        function loadData() {
+            const data = JSON.parse(localStorage.getItem('cvBuilderData'));
+            if (data) {
+                for (const id in data) {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        input.value = data[id];
+                    }
+                }
+                // Apply saved settings after loading data
+                applyCvSettings();
+            }
+        }
+
+        /**
+         * Applies the selected template and accent color to the CV preview.
+         */
+        function applyCvSettings() {
+            const template = document.getElementById('template_selector').value;
+            const color = document.getElementById('accent_color_picker').value;
+            const cvPaper = document.getElementById('cv_paper');
+
+            // Apply template
+            cvPaper.classList.remove('template-modern', 'template-classic');
+            cvPaper.classList.add(`template-${template}`);
+
+            // Apply color
+            document.documentElement.style.setProperty('--secondary-color', color);
+        }
+
+
+        // --- Event Listeners ---
+
+        // Listen for clicks on the print button
+        document.getElementById('btn_print').addEventListener('click', () => {
+            updatePreview(); // Ensure preview is up-to-date
+            setTimeout(() => window.print(), 200); // Small delay for rendering
+        });
+
+        // Clear form button
+        document.getElementById('btn_clear').addEventListener('click', () => {
+            // Using a custom modal instead of confirm() would be a better UX,
+            // but for simplicity in a single file, confirm is used.
+            if (confirm('Are you sure you want to clear the form? All your data will be erased.')) {
+                const allFormElements = document.querySelectorAll('.form-panel input, .form-panel textarea');
+                allFormElements.forEach(el => el.value = '');
+                localStorage.removeItem('cvBuilderData');
+                updatePreview();
+                // Reset controls to default
+                document.getElementById('template_selector').value = 'modern';
+                document.getElementById('accent_color_picker').value = '#3498db';
+                applyCvSettings();
+            }
+        });
+
+
+        // Listen for input on all form fields to trigger live updates
+        const allInputs = document.querySelectorAll('.form-panel input, .form-panel textarea, .form-panel select');
+        allInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                // Throttle updates to prevent lag on fast typing
+                if (window._updt) clearTimeout(window._updt);
+                window._updt = setTimeout(() => {
+                    updatePreview();
+                    applyCvSettings();
+                    saveData(); // Save on every input change
+                }, 300);
+            });
+        });
+
+        // --- Initial Application Load ---
+        // When the page loads, first load any saved data, then update the preview.
+        window.addEventListener('load', () => {
+            loadData();
+            updatePreview();
+            applyCvSettings(); // Apply initial settings on load
+        });
+    </script>
+</body>
+</html>
+
+
